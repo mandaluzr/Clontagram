@@ -21,6 +21,7 @@ import Upload from "./Vistas/Upload";
 import Feed from "./Vistas/Feed";
 import PostVista from "./Vistas/PostVista"; //linea 98
 import Explore from "./Vistas/Explore";
+import Perfil from "./Vistas/Perfil";
 
 initAxiosInterceptors(); // si existe un token, esta función se lo agrega para que pueda reconocer el user.
 // se pone por fuera del componente App para que apenas corre el JS.. si hay token, hace la llamada a la App sabiendo que hay un token.
@@ -90,7 +91,11 @@ function App() {
       <Nav usuario={usuario} />
       <Error mensaje={error} esconderError={esconderError} />
       {usuario ? (
-        <LoginRoutes mostrarError={mostrarError} usuario={usuario} />
+        <LoginRoutes
+          mostrarError={mostrarError}
+          usuario={usuario}
+          logout={logout}
+        />
       ) : (
         <LogoutRoutes
           login={login}
@@ -102,20 +107,33 @@ function App() {
   );
 }
 
-function LoginRoutes({ mostrarError, usuario }) {
+function LoginRoutes({ mostrarError, usuario, logout }) {
   return (
     <Switch>
       <Route
         path="/upload"
-        render={props => <Upload {...props} mostrarError={mostrarError} />}
+        render={(props) => <Upload {...props} mostrarError={mostrarError} />}
       />
       <Route
         path="/post/:id"
-        render={props => <PostVista {...props} mostrarError={mostrarError} usuario={usuario} />}
+        render={(props) => (
+          <PostVista {...props} mostrarError={mostrarError} usuario={usuario} />
+        )}
+      />
+      <Route
+        path="/perfil/:username"
+        render={(props) => (
+          <Perfil
+            {...props}
+            mostrarError={mostrarError}
+            usuario={usuario}
+            logout={logout}
+          />
+        )}
       />
       <Route
         path="/explore"
-        render={props => <Explore {...props} mostrarError={mostrarError} />}
+        render={(props) => <Explore {...props} mostrarError={mostrarError} />}
       />
       <Route
         path="/"
